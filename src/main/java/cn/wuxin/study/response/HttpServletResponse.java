@@ -33,7 +33,7 @@ public class HttpServletResponse {
                 stringBuffer.append(new String(data,0,len));
             }
             //设置回应的头信息
-            String responseHead="HTTP/1.1 200 OK\r\nContent-Type: text/html;charset=gbk\r\nContent-Length: "+stringBuffer.toString().getBytes().length+"\r\n\r\n";
+            String responseHead="HTTP/1.1 200 OK\r\nContent-Type: text/html;charset=utf-8\r\nContent-Length: "+stringBuffer.toString().getBytes().length+"\r\n\r\n";
             //进行输出
             out(responseHead,stringBuffer.toString());
             return true ;
@@ -41,6 +41,21 @@ public class HttpServletResponse {
         return false;
     }
 
+
+    /**
+     * 进行自定义输出
+     * @param context 要输出的内容
+     */
+    public void write(String context){
+        //设置回应的头信息
+        String responseHead="HTTP/1.1 200 OK\r\nContent-Type: text/html;charset=utf-8\r\nContent-Length: "+context.toString().getBytes().length+"\r\n\r\n";
+        //进行输出
+        try {
+            out(responseHead,context);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * 错误信息页面跳转
      */

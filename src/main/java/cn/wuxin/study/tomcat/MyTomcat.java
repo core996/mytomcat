@@ -1,5 +1,6 @@
 package cn.wuxin.study.tomcat;
 
+import cn.wuxin.study.dispather.Dispatcher;
 import cn.wuxin.study.request.HttpServletRequest;
 import cn.wuxin.study.response.HttpServletResponse;
 
@@ -8,6 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -30,13 +33,23 @@ public class MyTomcat {
             while(true){
                 //进行连接监听，等待连接
                 Socket accept = socket.accept();
+                //获取输入流
                 InputStream inputStream = accept.getInputStream();
+                //获取输入流
                 OutputStream outputStream = accept.getOutputStream();
+                //进行Request对象实例化
                 HttpServletRequest request = new HttpServletRequest(inputStream) ;
+                //进行Response对象实例化
                 HttpServletResponse response = new HttpServletResponse(outputStream) ;
-                if (!response.writeHtml(request.getUrl())) {
-                    response.out404();
-                }
+                //创建分发程序类
+                Dispatcher dispather = new Dispatcher(request, response);
+                //进行Servlet配置
+                Map<String , String> map = new HashMap<>() ;
+                map.put("/hello.servlet","cn.wuxin.study.servlet.MyServlet");
+                dispather.setServletClass(map);
+                //调用分发处理程序
+                dispather.dispatcher();
+                //关闭连接
                 accept.close();
             }
 

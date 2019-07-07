@@ -1,4 +1,4 @@
-package cn.wuxin.study.Servlet;
+package cn.wuxin.study.servlet.abs;
 
 import cn.wuxin.study.request.HttpServletRequest;
 import cn.wuxin.study.response.HttpServletResponse;
@@ -10,16 +10,14 @@ import cn.wuxin.study.response.HttpServletResponse;
  * @create: 2019-07-07 17:50
  **/
 public abstract class Servlet {
-    protected void service(HttpServletRequest request , HttpServletResponse response) {
+    public void service(HttpServletRequest request , HttpServletResponse response) {
         String method = request.getMethod() ;
         if (method.equalsIgnoreCase("get")){
-
+            this.doGet( request ,  response);
         }else if(method.equalsIgnoreCase("post")){
-
-        }else {
-
+            this.doPost(request , response);
         }
     }
-    abstract void  doGet(HttpServletRequest request , HttpServletResponse response)  ;
-    abstract void doPost(HttpServletRequest request , HttpServletResponse response) ;
+    protected abstract void  doGet(HttpServletRequest request, HttpServletResponse response)  ;
+    protected abstract void doPost(HttpServletRequest request , HttpServletResponse response) ;
 }
