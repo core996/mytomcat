@@ -1,4 +1,7 @@
-package cn.wuxin.study;
+package cn.wuxin.study.tomcat;
+
+import cn.wuxin.study.request.HttpServletRequest;
+import cn.wuxin.study.response.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +16,7 @@ import java.net.Socket;
  * @create: 2019-07-07 16:12
  **/
 public class MyTomcat {
+    //端口定义
     private int port = 8080 ;
     public MyTomcat() {
     }
@@ -21,19 +25,18 @@ public class MyTomcat {
     }
     public void start(){
         try {
+            //创建bio客户端
             ServerSocket socket = new ServerSocket(this.port);
             while(true){
+                //进行连接监听，等待连接
                 Socket accept = socket.accept();
                 InputStream inputStream = accept.getInputStream();
                 OutputStream outputStream = accept.getOutputStream();
-                int count = 0 ;
-                while (count == 0){
-                    count = inputStream.available();
+                HttpServletRequest request = new HttpServletRequest(inputStream) ;
+                HttpServletResponse response = new HttpServletResponse(outputStream) ;
+                if (!response.writeHtml(request.getUrl())) {
+                    response.out404();
                 }
-                byte []data = new byte[inputStream.available()] ;
-                inputStream.read(data);
-                System.out.println(new String(data));
-                outputStream.write("123".getBytes());
                 accept.close();
             }
 
@@ -41,4 +44,5 @@ public class MyTomcat {
             e.printStackTrace();
         }
     }
+
 }

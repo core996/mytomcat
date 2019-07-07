@@ -1,6 +1,6 @@
 package cn.mytomcat.test;
 
-import cn.wuxin.study.MyTomcat;
+import cn.wuxin.study.tomcat.MyTomcat;
 import org.junit.Test;
 
 /**
